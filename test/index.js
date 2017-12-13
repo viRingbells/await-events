@@ -73,3 +73,24 @@ describe('await events on an extended event emitter', () => {
     });
 
 });
+
+describe('await error', () => {
+    let emitter = new EventEmitter();
+    emitter.await = AwaitEvent.await;
+    before(() => {
+        setTimeout(() => emitter.emit('error', new Error('FAKE ERROR')), 100);
+    });
+
+    it('do not throw and returns the error', async () => {
+        let returned = {};
+        let thrown = {};
+        try {
+            returned = await emitter.await('error');
+        }
+        catch(error) {
+            thrown = error;
+        }
+        returned.should.be.an.instanceOf(Error).with.property('message', 'FAKE ERROR');
+        thrown.should.not.be.an.instanceOf(Error);
+    });
+});

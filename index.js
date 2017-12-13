@@ -36,8 +36,8 @@ class AwaitEvent extends EventEmitter {
                 emitter.removeListener(eventName, res);
                 reject(...args);
             };
-            emitter.once(errorEventName, rej);
             emitter.once(eventName, res);
+            emitter.once(errorEventName, rej);
         });
     }
 
